@@ -12,14 +12,19 @@ type MessagesPaneProps = {
   chat: ChatProps;
 };
 
-export default function MessagesPane(props: MessagesPaneProps) {
-  const { chat } = props;
-  const [chatMessages, setChatMessages] = React.useState(chat.messages);
+export default function MessagesPane({
+    messages,
+    sender,
+    onSendButtonClick,
+                                     }: MessagesPaneProps['chat'] & {
+    onSendButtonClick: (message: string) => void;
+}) {
+  const [chatMessages, setChatMessages] = React.useState(messages);
   const [textAreaValue, setTextAreaValue] = React.useState('');
 
   React.useEffect(() => {
-    setChatMessages(chat.messages);
-  }, [chat.messages]);
+    setChatMessages(messages);
+  }, [messages]);
 
   return (
     <Sheet
@@ -30,7 +35,7 @@ export default function MessagesPane(props: MessagesPaneProps) {
         backgroundColor: 'background.level1',
       }}
     >
-      <MessagesPaneHeader sender={chat.sender} />
+      <MessagesPaneHeader sender={sender} />
       <Box
         sx={{
           display: 'flex',
@@ -52,12 +57,12 @@ export default function MessagesPane(props: MessagesPaneProps) {
                 spacing={2}
                 sx={{ flexDirection: isYou ? 'row-reverse' : 'row' }}
               >
-                {message.sender !== 'You' && (
-                  <AvatarWithStatus
-                    online={message.sender.online}
-                    src={message.sender.avatar}
-                  />
-                )}
+                {/*{message.sender !== 'You' && (*/}
+                {/*  <AvatarWithStatus*/}
+                {/*    online={message.sender.online}*/}
+                {/*    src={message.sender.avatar}*/}
+                {/*  />*/}
+                {/*)}*/}
                 <ChatBubble variant={isYou ? 'sent' : 'received'} {...message} />
               </Stack>
             );
@@ -68,17 +73,18 @@ export default function MessagesPane(props: MessagesPaneProps) {
         textAreaValue={textAreaValue}
         setTextAreaValue={setTextAreaValue}
         onSubmit={() => {
-          const newId = chatMessages.length + 1;
-          const newIdString = newId.toString();
-          setChatMessages([
-            ...chatMessages,
-            {
-              id: newIdString,
-              sender: 'You',
-              content: textAreaValue,
-              timestamp: 'Just now',
-            },
-          ]);
+            onSendButtonClick(textAreaValue);
+          // const newId = chatMessages.length + 1;
+          // const newIdString = newId.toString();
+          // setChatMessages([
+          //   ...chatMessages,
+          //   {
+          //     id: newIdString,
+          //     sender: 'You',
+          //     content: textAreaValue,
+          //     timestamp: 'Just now',
+          //   },
+          // ]);
         }}
       />
     </Sheet>
