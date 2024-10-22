@@ -16,7 +16,7 @@ export default function MyProfile() {
 
     // @ts-ignore
     useEffect(() => {
-        const newSocket = io('/');
+        const newSocket = io(':4000/');
         setSocket(newSocket);
 
         return () => newSocket.close();
@@ -28,9 +28,7 @@ export default function MyProfile() {
                 if (typeof msg === 'string') {
                     msg = JSON.parse(msg);
                 }
-                console.log(typeof msg)
                 console.log(msg)
-                // const newMessage = JSON.parse(msg);
                 setSelectedChat((prevMessages) => {
                     return {
                         ...prevMessages,
